@@ -1,6 +1,6 @@
 {
   "name": "ember-singularity-mixins",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Mixins leveraging the power of Ember Singularity",
   "directories": {
     "doc": "doc",
