@@ -1,5 +1,7 @@
 # Ember Singularity Mixins
 
+[![Build Status](https://travis-ci.org/trentmwillis/ember-singularity-mixins.svg?branch=master)](https://travis-ci.org/trentmwillis/ember-singularity-mixins)
+
 This addon consumes the unified event handling of [Ember Singularity](https://github.com/trentmwillis/ember-singularity)
 in order to provide easy-to-use and performant mixins for "spammy" events, such
 as scrolling, resizing, or touch events.
