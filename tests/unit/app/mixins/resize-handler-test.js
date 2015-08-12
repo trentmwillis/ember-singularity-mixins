@@ -1,10 +1,8 @@
 /* global CustomEvent */
 
 import Ember from 'ember';
-import ResizeHandlerMixin from '../../../mixins/resize-handler';
+import sinon from 'sinon';
 import { moduleFor, test } from 'ember-qunit';
-
-const RSVP = Ember.RSVP;
 
 let ResizeHandlerObject;
 let subject;
@@ -25,18 +23,6 @@ moduleFor('mixin:resize-handler', 'Unit | Mixin | resize-handler', {
     sandbox.restore();
   }
 });
-
-// TODO: Remove when we upgrade to Phantom 2.0
-if (!window.CustomEvent) {
-  window.CustomEvent = function(event, params) {
-    params = params || { bubbles: false, cancelable: false, detail: undefined };
-    let evt = document.createEvent('CustomEvent');
-    evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
-    return evt;
-  };
-
-  window.CustomEvent.prototype = window.Event.prototype;
-}
 
 test('it exists', function(assert) {
   subject = ResizeHandlerObject.create();

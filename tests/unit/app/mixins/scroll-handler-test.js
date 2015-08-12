@@ -1,6 +1,7 @@
 /* global CustomEvent */
 
 import Ember from 'ember';
+import sinon from 'sinon';
 import { moduleFor, test } from 'ember-qunit';
 
 let ScrollHandlerObject;
@@ -23,18 +24,6 @@ moduleFor('mixin:scroll-handler', 'Unit | Mixin | scroll-handler', {
     sandbox.restore();
   }
 });
-
-// TODO: Remove when we upgrade to Phantom 2.0
-if (!window.CustomEvent) {
-  window.CustomEvent = function(event, params) {
-    params = params || { bubbles: false, cancelable: false, detail: undefined };
-    let evt = document.createEvent('CustomEvent');
-    evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
-    return evt;
-  };
-
-  window.CustomEvent.prototype = window.Event.prototype;
-}
 
 test('it works', function(assert) {
   subject = ScrollHandlerObject.create();
