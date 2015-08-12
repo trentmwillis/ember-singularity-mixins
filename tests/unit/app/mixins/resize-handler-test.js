@@ -14,8 +14,9 @@ moduleFor('mixin:resize-handler', 'Unit | Mixin | resize-handler', {
   beforeEach() {
     let mixin = this.container.lookupFactory('mixin:resize-handler');
     let object = Ember.Object.extend(mixin);
-    this.container.register('object:resize-handler', object);
+    this.registry.register('object:resize-handler', object);
     ResizeHandlerObject = this.container.lookupFactory('object:resize-handler');
+
     sandbox = sinon.sandbox.create();
   },
 

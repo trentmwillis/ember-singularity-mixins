@@ -14,7 +14,7 @@ moduleFor('mixin:scroll-handler', 'Unit | Mixin | scroll-handler', {
   beforeEach() {
     let mixin = this.container.lookupFactory('mixin:scroll-handler');
     let object = Ember.Object.extend(mixin);
-    this.container.register('object:scroll-handler', object);
+    this.registry.register('object:scroll-handler', object);
     ScrollHandlerObject = this.container.lookupFactory('object:scroll-handler');
 
     sandbox = sinon.sandbox.create();

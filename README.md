@@ -4,8 +4,8 @@ This addon consumes the unified event handling of [Ember Singularity](https://gi
 in order to provide easy-to-use and performant mixins for "spammy" events, such
 as scrolling, resizing, or touch events.
 
-*Note: If you use this addon, you do **not** need to include ember-singularity
-as a dependency as well.*
+_Note: If you use this addon, you do **not** need to include ember-singularity
+as a dependency as well._
 
 ## Usage
 
