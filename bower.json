@@ -15,6 +15,7 @@
     "sinonjs": "~1.14.1"
   },
   "resolutions": {
-    "ember-data": "canary"
+    "ember-data": "canary",
+    "ember": "1.13.6"
   }
 }
