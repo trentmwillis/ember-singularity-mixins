@@ -17,6 +17,9 @@ export default Ember.Mixin.create({
   // The hook for your scroll functionality, you must implement this
   [SCROLL]: undefined,
 
+  // Whether to trigger the scroll handler on initial insert
+  triggerOnInsert: false,
+
   // Setups up the handler binding for the scroll function
   registerScrollHandlers: Ember.on('didInsertElement', function() {
     // TODO: limit this to the views object (this.$()) or the window
@@ -29,6 +32,10 @@ export default Ember.Mixin.create({
     this.set(SCROLL, scroll);
 
     this.get('unifiedEventHandler').register(eventTarget, SCROLL, scroll);
+
+    if (this.get('triggerOnInsert')) {
+      Ember.run.scheduleOnce('afterRender', scroll);
+    }
   }),
 
   // Unbinds the event handler on destruction of the view

@@ -74,6 +74,21 @@ test('registerScrollHandlers fails if no scroll function defined', function(asse
   assert.throws(() => subject.registerScrollHandlers());
 });
 
+test('registerScrollHandlers triggers an initial scroll with triggerOnInsert', function(assert) {
+  let scrollSpy = sandbox.spy();
+
+  subject = ScrollHandlerObject.create({
+    triggerOnInsert: true,
+    scroll: scrollSpy
+  });
+
+  Ember.run(() => subject.registerScrollHandlers());
+
+  Ember.run.next(() => assert.ok(scrollSpy.calledOnce));
+
+  subject.unregisterScrollHandlers();
+});
+
 /* unregisterScrollHandlers */
 
 test('unregisterScrollHandlers unbinds the scroll function on the default target', function(assert) {
