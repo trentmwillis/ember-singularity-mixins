@@ -125,3 +125,20 @@ test('unregisterScrollHandlers unbinds the scroll function on a custom target', 
 
   assert.ok(callbackStub.notCalled);
 });
+
+test('unregisterScrollHandlers can be called more than once without erring', function(assert) {
+  assert.expect(0);
+
+  Ember.$('#ember-testing').append(Ember.$('<div id="some-target"/>'));
+  let scrollingElement = document.getElementById('some-target');
+
+  subject = ScrollHandlerObject.create({
+    scroll: () => {},
+    eventTarget: '#some-target',
+    scrollingElement
+  });
+
+  subject.registerScrollHandlers();
+  subject.unregisterScrollHandlers();
+  subject.unregisterScrollHandlers();
+});
