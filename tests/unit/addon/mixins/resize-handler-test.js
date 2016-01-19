@@ -82,3 +82,16 @@ test('unregisterResizeHandlers unbinds the resize event from the window', functi
 
   assert.ok(resizeSpy.notCalled);
 });
+
+test('unregisterResizeHandlers can be called more than once without erring', function(assert) {
+  assert.expect(0);
+
+  subject = ResizeHandlerObject.create({
+    resizeOnInsert: false,
+    resize: () => {}
+  });
+
+  subject.registerResizeHandlers();
+  subject.unregisterResizeHandlers();
+  subject.unregisterResizeHandlers();
+});

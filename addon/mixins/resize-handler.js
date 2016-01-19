@@ -23,6 +23,8 @@ export default Ember.Mixin.create({
 
     this.get('unifiedEventHandler').register('window', RESIZE, resize);
 
+    this._resizeHandlerRegistered = true;
+
     if (this.get('resizeOnInsert')) {
       // Call the resize handler to make sure everything is in the correct state.
       // We do it after the current render, to avoid any side-effects.
@@ -34,7 +36,10 @@ export default Ember.Mixin.create({
 
   // Unbinds the event handler on destruction of the view
   unregisterResizeHandlers: Ember.on('willDestroyElement', function() {
-    let resize = this.get(RESIZE);
-    this.get('unifiedEventHandler').unregister('window', RESIZE, resize);
+    if (this._resizeHandlerRegistered) {
+      let resize = this.get(RESIZE);
+      this.get('unifiedEventHandler').unregister('window', RESIZE, resize);
+      this._resizeHandlerRegistered = false;
+    }
   })
 });

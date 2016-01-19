@@ -33,6 +33,8 @@ export default Ember.Mixin.create({
 
     this.get('unifiedEventHandler').register(eventTarget, SCROLL, scroll);
 
+    this._scrollHandlerRegistered = true;
+
     if (this.get('triggerOnInsert')) {
       Ember.run.scheduleOnce('afterRender', scroll);
     }
@@ -40,8 +42,11 @@ export default Ember.Mixin.create({
 
   // Unbinds the event handler on destruction of the view
   unregisterScrollHandlers: Ember.on('willDestroyElement', function() {
-    let eventTarget = this.get(EVENTTARGET);
-    let scroll = this.get(SCROLL);
-    this.get('unifiedEventHandler').unregister(eventTarget, SCROLL, scroll);
+    if (this._scrollHandlerRegistered) {
+      let scroll = this.get(SCROLL);
+      let eventTarget = this.get(EVENTTARGET);
+      this.get('unifiedEventHandler').unregister(eventTarget, SCROLL, scroll);
+      this._scrollHandlerRegistered = false;
+    }
   })
 });
