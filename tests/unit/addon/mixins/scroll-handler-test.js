@@ -89,6 +89,23 @@ test('registerScrollHandlers triggers an initial scroll with triggerOnInsert', f
   subject.unregisterScrollHandlers();
 });
 
+test('registerScrollHandlers triggers an initial scroll with triggerOnInsert and delayTriggerOnInsert', function(assert) {
+  let scrollSpy = sandbox.spy();
+
+  subject = ScrollHandlerObject.create({
+    triggerOnInsert: true,
+    delayTriggerOnInsert: true,
+    scroll: scrollSpy
+  });
+
+  Ember.run(() => subject.registerScrollHandlers());
+
+  Ember.run.next(() => assert.ok(scrollSpy.calledOnce));
+
+  subject.unregisterScrollHandlers();
+});
+
+
 /* unregisterScrollHandlers */
 
 test('unregisterScrollHandlers unbinds the scroll function on the default target', function(assert) {
