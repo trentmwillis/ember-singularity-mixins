@@ -20,6 +20,9 @@ export default Ember.Mixin.create({
   // Whether to trigger the scroll handler on initial insert
   triggerOnInsert: false,
 
+  // Whether to trigger the scroll handler on next run loop
+  delayTriggerOnInsert: false,
+
   // Setups up the handler binding for the scroll function
   registerScrollHandlers: Ember.on('didInsertElement', function() {
     // TODO: limit this to the views object (this.$()) or the window
@@ -36,7 +39,13 @@ export default Ember.Mixin.create({
     this._scrollHandlerRegistered = true;
 
     if (this.get('triggerOnInsert')) {
-      Ember.run.scheduleOnce('afterRender', scroll);
+      if (this.get('delayTriggerOnInsert')) {
+        Ember.run.next(() => {
+          scroll();
+        });
+      } else {
+        Ember.run.scheduleOnce('afterRender', scroll);
+      }
     }
   }),
 
