@@ -48,7 +48,7 @@
   ],
   "dependencies": {
     "ember-cli-babel": "^5.1.5",
-    "ember-singularity": "^1.0.0"
+    "ember-singularity": "git@github.com:sparrowj/ember-singularity.git#master.git"
   },
   "ember-addon": {
     "configPath": "tests/dummy/config"
