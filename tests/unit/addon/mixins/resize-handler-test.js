@@ -3,19 +3,20 @@
 import Ember from 'ember';
 import sinon from 'sinon';
 import { moduleFor, test } from 'ember-qunit';
+import ResizeHandlerMixin from 'dummy/mixins/resize-handler';
 
 let ResizeHandlerObject;
 let subject;
 let sandbox;
 
 moduleFor('mixin:resize-handler', 'Unit | Mixin | resize-handler', {
-  needs: ['service:unified-event-handler'],
+  integration: true,
 
   beforeEach() {
-    let mixin = this.container.lookupFactory('mixin:resize-handler');
-    let object = Ember.Object.extend(mixin);
+    let owner = Ember.getOwner(this);
+    let object = Ember.Object.extend(ResizeHandlerMixin);
     this.registry.register('object:resize-handler', object);
-    ResizeHandlerObject = this.container.lookupFactory('object:resize-handler');
+    ResizeHandlerObject = owner.factoryFor('object:resize-handler');
 
     sandbox = sinon.sandbox.create();
   },

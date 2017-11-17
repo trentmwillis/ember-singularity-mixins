@@ -3,6 +3,7 @@
 import Ember from 'ember';
 import sinon from 'sinon';
 import { moduleFor, test } from 'ember-qunit';
+import ScrollHandlerMixin from 'dummy/mixins/scroll-handler';
 
 let ScrollHandlerObject;
 let subject;
@@ -12,10 +13,10 @@ moduleFor('mixin:scroll-handler', 'Unit | Mixin | scroll-handler', {
   needs: ['service:unified-event-handler'],
 
   beforeEach() {
-    let mixin = this.container.lookupFactory('mixin:scroll-handler');
-    let object = Ember.Object.extend(mixin);
+    let owner = Ember.getOwner(this);
+    let object = Ember.Object.extend(ScrollHandlerMixin);
     this.registry.register('object:scroll-handler', object);
-    ScrollHandlerObject = this.container.lookupFactory('object:scroll-handler');
+    ScrollHandlerObject = owner.factoryFor('object:scroll-handler');
 
     sandbox = sinon.sandbox.create();
   },
