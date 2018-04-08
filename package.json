@@ -47,7 +47,7 @@
     "resize"
   ],
   "dependencies": {
-    "ember-cli-babel": "^5.1.5",
+    "ember-cli-babel": "^6.12.0",
     "ember-singularity": "^1.0.4"
   },
   "ember-addon": {
