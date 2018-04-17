@@ -15,13 +15,17 @@ export default Ember.Mixin.create({
   // Determines if we should fire a resize event on element insertion
   resizeOnInsert: true,
 
+  // Interval in milliseconds at which the resize handler will be called
+  // `undefined` by default, can be overridden if custom interval is needed
+  resizeEventInterval: undefined,
+
   // Setups up the handler binding for the resize function
   registerResizeHandlers: Ember.on('didInsertElement', function() {
     // Bind 'this' context to the resize handler for when passed as a callback
     let resize = this.get(RESIZE).bind(this);
     this.set(RESIZE, resize);
 
-    this.get('unifiedEventHandler').register('window', RESIZE, resize);
+    this.get('unifiedEventHandler').register('window', RESIZE, resize, this.get('resizeEventInterval'));
 
     this._resizeHandlerRegistered = true;
 

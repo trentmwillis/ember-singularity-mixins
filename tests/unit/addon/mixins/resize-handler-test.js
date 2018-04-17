@@ -96,3 +96,32 @@ test('unregisterResizeHandlers can be called more than once without erring', fun
   subject.unregisterResizeHandlers();
   subject.unregisterResizeHandlers();
 });
+
+
+test('resizeEventInterval is passed to the unified event handler service', function(assert) {
+  assert.expect(1);
+
+  let resizeEventInterval = 10;
+
+  let uehServiceRegisterStub = sandbox.stub();
+  let uehServiceUnRegisterStub = sandbox.stub();
+  let unifiedEventHandlerService = {
+    register: uehServiceRegisterStub,
+    unregister: uehServiceUnRegisterStub
+  };
+
+  subject = ResizeHandlerObject.create({
+    resizeEventInterval,
+    resize: () => {},
+    unifiedEventHandler: unifiedEventHandlerService
+  });
+
+  Ember.run(() => {
+    subject.registerResizeHandlers();
+    subject.unregisterResizeHandlers();
+  });
+
+  window.dispatchEvent(new CustomEvent('resize'));
+
+  assert.ok(uehServiceRegisterStub.calledWithExactly(sinon.match.any, sinon.match.any, sinon.match.any, resizeEventInterval));
+});

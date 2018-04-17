@@ -143,3 +143,29 @@ test('unregisterScrollHandlers can be called more than once without erring', fun
   subject.unregisterScrollHandlers();
   subject.unregisterScrollHandlers();
 });
+
+test('scrollEventInterval is passed to the unified event handler service', function(assert) {
+  assert.expect(1);
+
+  let scrollEventInterval = 10;
+
+  let uehServiceRegisterStub = sandbox.stub();
+  let uehServiceUnRegisterStub = sandbox.stub();
+  let unifiedEventHandlerService = {
+    register: uehServiceRegisterStub,
+    unregister: uehServiceUnRegisterStub
+  };
+
+  subject = ScrollHandlerObject.create({
+    scrollEventInterval,
+    scroll: () => {},
+    unifiedEventHandler: unifiedEventHandlerService
+  });
+
+  subject.registerScrollHandlers();
+  subject.unregisterScrollHandlers();
+
+  window.dispatchEvent(new CustomEvent('resize'));
+
+  assert.ok(uehServiceRegisterStub.calledWithExactly(sinon.match.any, sinon.match.any, sinon.match.any, scrollEventInterval));
+});
