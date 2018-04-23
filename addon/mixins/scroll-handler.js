@@ -17,6 +17,10 @@ export default Ember.Mixin.create({
   // The hook for your scroll functionality, you must implement this
   [SCROLL]: undefined,
 
+  // Interval in milliseconds at which the scroll handler will be called
+  // `undefined` by default, can be overridden if custom interval is needed
+  scrollEventInterval: undefined,
+
   // Whether to trigger the scroll handler on initial insert
   triggerOnInsert: false,
 
@@ -31,7 +35,7 @@ export default Ember.Mixin.create({
     // Save the newly bound function back as a reference for deregistration.
     this.set(SCROLL, scroll);
 
-    this.get('unifiedEventHandler').register(eventTarget, SCROLL, scroll);
+    this.get('unifiedEventHandler').register(eventTarget, SCROLL, scroll, this.get('scrollEventInterval'));
 
     this._scrollHandlerRegistered = true;
 
