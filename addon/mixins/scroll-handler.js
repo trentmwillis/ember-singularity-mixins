@@ -9,7 +9,7 @@ const EVENTTARGET = 'eventTarget';
 const WINDOW = 'window';
 
 export default Ember.Mixin.create({
-  unifiedEventHandler: Ember.inject.service(),
+  unifiedEventHandler: Ember.inject.service('unified-event-handler'),
 
   // The target of the scrolling event, defaults to the window
   [EVENTTARGET]: WINDOW,
