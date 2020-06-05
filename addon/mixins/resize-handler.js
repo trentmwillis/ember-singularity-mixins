@@ -7,7 +7,7 @@ import Ember from 'ember';
 const RESIZE = 'resize';
 
 export default Ember.Mixin.create({
-  unifiedEventHandler: Ember.inject.service(),
+  unifiedEventHandler: Ember.inject.service('unified-event-handler'),
 
   // The hook for your resize functionality, you must implement this
   [RESIZE]: undefined,
