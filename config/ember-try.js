@@ -11,10 +11,10 @@ module.exports = function() {
     return {
       scenarios: [
         {
-          name: 'ember-lts-2.12',
+          name: 'ember-lts-3.16',
           npm: {
             devDependencies: {
-              'ember-source': '~2.12.0'
+              'ember-source': '~3.16.0'
             }
           }
         },
@@ -27,10 +27,10 @@ module.exports = function() {
           }
         },
         {
-          name: 'ember-lts-2.18',
+          name: 'ember-lts-3.20',
           npm: {
             devDependencies: {
-              'ember-source': '~2.18.0'
+              'ember-source': '~3.20.0'
             }
           }
         },
@@ -58,12 +58,6 @@ module.exports = function() {
             }
           }
         },
-        {
-          name: 'ember-default',
-          npm: {
-            devDependencies: {}
-          }
-        }
       ]
     };
   });
