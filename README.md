@@ -1,6 +1,6 @@
 # Ember Singularity Mixins
 
-[![Build Status](https://travis-ci.org/trentmwillis/ember-singularity-mixins.svg?branch=master)](https://travis-ci.org/trentmwillis/ember-singularity-mixins)
+[![CI](https://github.com/trentmwillis/ember-singularity-mixins/workflows/CI/badge.svg)](https://github.com/trentmwillis/ember-singularity-mixins/actions?query=workflow%3ACI)
 [![npm version](https://badge.fury.io/js/ember-singularity-mixins.svg)](https://badge.fury.io/js/ember-singularity-mixins)
 
 This addon consumes the unified event handling of [Ember Singularity](https://github.com/trentmwillis/ember-singularity)
