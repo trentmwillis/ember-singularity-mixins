@@ -2,12 +2,13 @@
  * The resize-handler mixin adds an easy-to-use "resize" hook, similar to the
  * default Ember hook for click(). It is only applicable to views/components.
  */
-import Ember from 'ember';
+import Ember from "ember";
 
-const RESIZE = 'resize';
+const RESIZE = "resize";
 
+// eslint-disable-next-line ember/no-new-mixins
 export default Ember.Mixin.create({
-  unifiedEventHandler: Ember.inject.service('unified-event-handler'),
+  unifiedEventHandler: Ember.inject.service("unified-event-handler"),
 
   // The hook for your resize functionality, you must implement this
   [RESIZE]: undefined,
@@ -20,30 +21,35 @@ export default Ember.Mixin.create({
   resizeEventInterval: undefined,
 
   // Setups up the handler binding for the resize function
-  registerResizeHandlers: Ember.on('didInsertElement', function() {
+  registerResizeHandlers: Ember.on("didInsertElement", function () {
     // Bind 'this' context to the resize handler for when passed as a callback
     let resize = this.get(RESIZE).bind(this);
     this.set(RESIZE, resize);
 
-    this.get('unifiedEventHandler').register('window', RESIZE, resize, this.get('resizeEventInterval'));
+    this.unifiedEventHandler.register(
+      "window",
+      RESIZE,
+      resize,
+      this.resizeEventInterval
+    );
 
     this._resizeHandlerRegistered = true;
 
-    if (this.get('resizeOnInsert')) {
+    if (this.resizeOnInsert) {
       // Call the resize handler to make sure everything is in the correct state.
       // We do it after the current render, to avoid any side-effects.
-      Ember.run.scheduleOnce('afterRender', this, () => {
+      Ember.run.scheduleOnce("afterRender", this, () => {
         resize();
       });
     }
   }),
 
   // Unbinds the event handler on destruction of the view
-  unregisterResizeHandlers: Ember.on('willDestroyElement', function() {
+  unregisterResizeHandlers: Ember.on("willDestroyElement", function () {
     if (this._resizeHandlerRegistered) {
       let resize = this.get(RESIZE);
-      this.get('unifiedEventHandler').unregister('window', RESIZE, resize);
+      this.unifiedEventHandler.unregister("window", RESIZE, resize);
       this._resizeHandlerRegistered = false;
     }
-  })
+  }),
 });
