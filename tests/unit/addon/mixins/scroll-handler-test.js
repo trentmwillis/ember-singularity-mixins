@@ -1,171 +1,183 @@
-/* global CustomEvent */
-
-import Ember from 'ember';
-import sinon from 'sinon';
-import { moduleFor, test } from 'ember-qunit';
-import ScrollHandlerMixin from 'dummy/mixins/scroll-handler';
+import Ember from "ember";
+import sinon from "sinon";
+import { module, test } from 'qunit';
+import { setupTest } from "ember-qunit";
+// eslint-disable ember/no-jquery
+// eslint-disable-next-line ember/no-mixins
+import ScrollHandlerMixin from "dummy/mixins/scroll-handler";
 
 let ScrollHandlerObject;
 let subject;
 let sandbox;
 
-moduleFor('mixin:scroll-handler', 'Unit | Mixin | scroll-handler', {
-  needs: ['service:unified-event-handler'],
+module("Unit | Mixin | scroll-handler", function(hooks) {
+  setupTest(hooks);
 
-  beforeEach() {
-    let owner = Ember.getOwner(this);
+  hooks.beforeEach(function() {
+    let owner = this.owner;
+    // eslint-disable-next-line ember/no-new-mixins
     let object = Ember.Object.extend(ScrollHandlerMixin);
-    this.registry.register('object:scroll-handler', object);
-    ScrollHandlerObject = owner.factoryFor('object:scroll-handler');
+    this.owner.register("object:scroll-handler", object);
+    ScrollHandlerObject = owner.factoryFor("object:scroll-handler");
 
     sandbox = sinon.sandbox.create();
-  },
+  });
 
-  afterEach() {
+  hooks.afterEach(function() {
     sandbox.restore();
-  }
-});
-
-test('it works', function(assert) {
-  subject = ScrollHandlerObject.create();
-  assert.ok(subject);
-});
-
-/* registerScrollHandlers */
-
-test('registerScrollHandlers binds the scroll function to the window by default', function(assert) {
-  let callbackStub = sandbox.stub();
-
-  subject = ScrollHandlerObject.create({
-    scroll: callbackStub
   });
 
-  subject.registerScrollHandlers();
-
-  window.dispatchEvent(new CustomEvent('scroll'));
-
-  assert.ok(callbackStub.calledOnce);
-
-  subject.unregisterScrollHandlers();
-});
-
-test('registerScrollHandlers binds the scroll function to a specified target', function(assert) {
-  let callbackStub = sandbox.stub();
-
-  Ember.$('#ember-testing').append(Ember.$('<div id="some-target"/>'));
-  let scrollingElement = document.getElementById('some-target');
-
-  subject = ScrollHandlerObject.create({
-    scroll: callbackStub,
-    eventTarget: '#some-target',
-    scrollingElement
+  test("it works", function (assert) {
+    subject = ScrollHandlerObject.create();
+    assert.ok(subject);
   });
 
-  subject.registerScrollHandlers();
+  /* registerScrollHandlers */
 
-  scrollingElement.dispatchEvent(new CustomEvent('scroll'));
+  test("registerScrollHandlers binds the scroll function to the window by default", function (assert) {
+    let callbackStub = sandbox.stub();
 
-  assert.ok(callbackStub.calledOnce);
+    subject = ScrollHandlerObject.create({
+      scroll: callbackStub,
+    });
 
-  subject.unregisterScrollHandlers();
-});
+    subject.registerScrollHandlers();
 
-test('registerScrollHandlers fails if no scroll function defined', function(assert) {
-  subject = ScrollHandlerObject.create();
-  assert.throws(() => subject.registerScrollHandlers());
-});
+    window.dispatchEvent(new CustomEvent("scroll"));
 
-test('registerScrollHandlers triggers an initial scroll with triggerOnInsert', function(assert) {
-  let scrollSpy = sandbox.spy();
+    assert.ok(callbackStub.calledOnce);
 
-  subject = ScrollHandlerObject.create({
-    triggerOnInsert: true,
-    scroll: scrollSpy
+    subject.unregisterScrollHandlers();
   });
 
-  Ember.run(() => subject.registerScrollHandlers());
+  test("registerScrollHandlers binds the scroll function to a specified target", function (assert) {
+    let callbackStub = sandbox.stub();
 
-  Ember.run.next(() => assert.ok(scrollSpy.calledOnce));
+    // eslint-disable-next-line ember/no-jquery
+    Ember.$("#ember-testing").append(Ember.$('<div id="some-target"/>'));
+    let scrollingElement = document.getElementById("some-target");
 
-  subject.unregisterScrollHandlers();
-});
+    subject = ScrollHandlerObject.create({
+      scroll: callbackStub,
+      eventTarget: "#some-target",
+      scrollingElement,
+    });
 
-/* unregisterScrollHandlers */
+    subject.registerScrollHandlers();
 
-test('unregisterScrollHandlers unbinds the scroll function on the default target', function(assert) {
-  let callbackStub = sandbox.stub();
+    scrollingElement.dispatchEvent(new CustomEvent("scroll"));
 
-  subject = ScrollHandlerObject.create({
-    scroll: callbackStub
+    assert.ok(callbackStub.calledOnce);
+
+    subject.unregisterScrollHandlers();
   });
 
-  subject.registerScrollHandlers();
-  subject.unregisterScrollHandlers();
-
-  window.dispatchEvent(new CustomEvent('scroll'));
-
-  assert.ok(callbackStub.notCalled);
-});
-
-test('unregisterScrollHandlers unbinds the scroll function on a custom target', function(assert) {
-  let callbackStub = sandbox.stub();
-
-  Ember.$('#ember-testing').append(Ember.$('<div id="some-target"/>'));
-  let scrollingElement = document.getElementById('some-target');
-
-  subject = ScrollHandlerObject.create({
-    scroll: callbackStub,
-    eventTarget: '#some-target',
-    scrollingElement
+  test("registerScrollHandlers fails if no scroll function defined", function (assert) {
+    subject = ScrollHandlerObject.create();
+    assert.throws(() => subject.registerScrollHandlers());
   });
 
-  subject.registerScrollHandlers();
-  subject.unregisterScrollHandlers();
+  test("registerScrollHandlers triggers an initial scroll with triggerOnInsert", function (assert) {
+    let scrollSpy = sandbox.spy();
 
-  scrollingElement.dispatchEvent(new CustomEvent('scroll'));
+    subject = ScrollHandlerObject.create({
+      triggerOnInsert: true,
+      scroll: scrollSpy,
+    });
 
-  assert.ok(callbackStub.notCalled);
-});
+    Ember.run(() => subject.registerScrollHandlers());
 
-test('unregisterScrollHandlers can be called more than once without erring', function(assert) {
-  assert.expect(0);
+    Ember.run.next(() => assert.ok(scrollSpy.calledOnce));
 
-  Ember.$('#ember-testing').append(Ember.$('<div id="some-target"/>'));
-  let scrollingElement = document.getElementById('some-target');
-
-  subject = ScrollHandlerObject.create({
-    scroll: () => {},
-    eventTarget: '#some-target',
-    scrollingElement
+    subject.unregisterScrollHandlers();
   });
 
-  subject.registerScrollHandlers();
-  subject.unregisterScrollHandlers();
-  subject.unregisterScrollHandlers();
-});
+  /* unregisterScrollHandlers */
 
-test('scrollEventInterval is passed to the unified event handler service', function(assert) {
-  assert.expect(1);
+  test("unregisterScrollHandlers unbinds the scroll function on the default target", function (assert) {
+    let callbackStub = sandbox.stub();
 
-  let scrollEventInterval = 10;
+    subject = ScrollHandlerObject.create({
+      scroll: callbackStub,
+    });
 
-  let uehServiceRegisterStub = sandbox.stub();
-  let uehServiceUnRegisterStub = sandbox.stub();
-  let unifiedEventHandlerService = {
-    register: uehServiceRegisterStub,
-    unregister: uehServiceUnRegisterStub
-  };
+    subject.registerScrollHandlers();
+    subject.unregisterScrollHandlers();
 
-  subject = ScrollHandlerObject.create({
-    scrollEventInterval,
-    scroll: () => {},
-    unifiedEventHandler: unifiedEventHandlerService
+    window.dispatchEvent(new CustomEvent("scroll"));
+
+    assert.ok(callbackStub.notCalled);
   });
 
-  subject.registerScrollHandlers();
-  subject.unregisterScrollHandlers();
+  test("unregisterScrollHandlers unbinds the scroll function on a custom target", function (assert) {
+    let callbackStub = sandbox.stub();
 
-  window.dispatchEvent(new CustomEvent('resize'));
+    // eslint-disable-next-line ember/no-jquery
+    Ember.$("#ember-testing").append(Ember.$('<div id="some-target"/>'));
+    let scrollingElement = document.getElementById("some-target");
 
-  assert.ok(uehServiceRegisterStub.calledWithExactly(sinon.match.any, sinon.match.any, sinon.match.any, scrollEventInterval));
+    subject = ScrollHandlerObject.create({
+      scroll: callbackStub,
+      eventTarget: "#some-target",
+      scrollingElement,
+    });
+
+    subject.registerScrollHandlers();
+    subject.unregisterScrollHandlers();
+
+    scrollingElement.dispatchEvent(new CustomEvent("scroll"));
+
+    assert.ok(callbackStub.notCalled);
+  });
+
+  test("unregisterScrollHandlers can be called more than once without erring", function (assert) {
+    assert.expect(0);
+
+    // eslint-disable-next-line ember/no-jquery
+    Ember.$("#ember-testing").append(Ember.$('<div id="some-target"/>'));
+    let scrollingElement = document.getElementById("some-target");
+
+    subject = ScrollHandlerObject.create({
+      scroll: () => {},
+      eventTarget: "#some-target",
+      scrollingElement,
+    });
+
+    subject.registerScrollHandlers();
+    subject.unregisterScrollHandlers();
+    subject.unregisterScrollHandlers();
+  });
+
+  test("scrollEventInterval is passed to the unified event handler service", function (assert) {
+    assert.expect(1);
+
+    let scrollEventInterval = 10;
+
+    let uehServiceRegisterStub = sandbox.stub();
+    let uehServiceUnRegisterStub = sandbox.stub();
+    let unifiedEventHandlerService = {
+      register: uehServiceRegisterStub,
+      unregister: uehServiceUnRegisterStub,
+    };
+
+    subject = ScrollHandlerObject.create({
+      scrollEventInterval,
+      scroll: () => {},
+      unifiedEventHandler: unifiedEventHandlerService,
+    });
+
+    subject.registerScrollHandlers();
+    subject.unregisterScrollHandlers();
+
+    window.dispatchEvent(new CustomEvent("resize"));
+
+    assert.ok(
+      uehServiceRegisterStub.calledWithExactly(
+        sinon.match.any,
+        sinon.match.any,
+        sinon.match.any,
+        scrollEventInterval
+      )
+    );
+  });
 });

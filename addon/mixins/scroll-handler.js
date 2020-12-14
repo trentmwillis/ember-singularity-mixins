@@ -2,14 +2,15 @@
  * The scroll-handler mixin adds an easy-to-use "scroll" hook, similar to the
  * default Ember hook for click(). It is only applicable to views/components.
  */
-import Ember from 'ember';
+import Ember from "ember";
 
-const SCROLL = 'scroll';
-const EVENTTARGET = 'eventTarget';
-const WINDOW = 'window';
-
+// eslint-disable ember/no-get
+const SCROLL = "scroll";
+const EVENTTARGET = "eventTarget";
+const WINDOW = "window";
+// eslint-disable-next-line ember/no-new-mixins
 export default Ember.Mixin.create({
-  unifiedEventHandler: Ember.inject.service('unified-event-handler'),
+  unifiedEventHandler: Ember.inject.service("unified-event-handler"),
 
   // The target of the scrolling event, defaults to the window
   [EVENTTARGET]: WINDOW,
@@ -25,7 +26,7 @@ export default Ember.Mixin.create({
   triggerOnInsert: false,
 
   // Setups up the handler binding for the scroll function
-  registerScrollHandlers: Ember.on('didInsertElement', function() {
+  registerScrollHandlers: Ember.on("didInsertElement", function () {
     // TODO: limit this to the views object (this.$()) or the window
     let eventTarget = this.get(EVENTTARGET);
 
@@ -35,22 +36,27 @@ export default Ember.Mixin.create({
     // Save the newly bound function back as a reference for deregistration.
     this.set(SCROLL, scroll);
 
-    this.get('unifiedEventHandler').register(eventTarget, SCROLL, scroll, this.get('scrollEventInterval'));
+    this.unifiedEventHandler.register(
+      eventTarget,
+      SCROLL,
+      scroll,
+      this.scrollEventInterval
+    );
 
     this._scrollHandlerRegistered = true;
 
-    if (this.get('triggerOnInsert')) {
-      Ember.run.scheduleOnce('afterRender', scroll);
+    if (this.triggerOnInsert) {
+      Ember.run.scheduleOnce("afterRender", scroll);
     }
   }),
 
   // Unbinds the event handler on destruction of the view
-  unregisterScrollHandlers: Ember.on('willDestroyElement', function() {
+  unregisterScrollHandlers: Ember.on("willDestroyElement", function () {
     if (this._scrollHandlerRegistered) {
       let scroll = this.get(SCROLL);
       let eventTarget = this.get(EVENTTARGET);
-      this.get('unifiedEventHandler').unregister(eventTarget, SCROLL, scroll);
+      this.unifiedEventHandler.unregister(eventTarget, SCROLL, scroll);
       this._scrollHandlerRegistered = false;
     }
-  })
+  }),
 });
